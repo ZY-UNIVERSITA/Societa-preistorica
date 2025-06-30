@@ -1,17 +1,27 @@
 package com.zy.societapreistorica
 
-import model.actor.{Environment, Inhabitant, Resources}
+import model.actor.{EnvironmentManager, Inhabitant, ResourcesManager}
+import model.traits.ReplenishResource
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.typed.ActorSystem
+import akka.actor.typed.scaladsl.Behaviors
+import com.zy.societapreistorica.model.entities.ResourcesEnum.{FOOD, WATER, WOOD}
 
 @main
-def main(): Unit =
-  val system = ActorSystem("Tribe")
+def main(): Unit = {
+  val rootBehavior = Behaviors.setup[Nothing] { context =>
+    val resourcesManager = context.spawn(ResourcesManager(), "Resources")
 
-  val resourcesManager = system.actorOf(Props[Resources](), "Resources")
+    val inhabitant1 = context.spawn(Inhabitant("Marco", resourcesManager), "Marco")
+    val inhabitant2 = context.spawn(Inhabitant("Luca", resourcesManager), "Luca")
+    val inhabitant3 = context.spawn(Inhabitant("Lucia", resourcesManager), "Lucia")
 
-  val inhabitant1 = system.actorOf(Props(new Inhabitant("Marco", resourcesManager)), "Marco")
-  val inhabitant2 = system.actorOf(Props(new Inhabitant("Luca", resourcesManager)), "Luca")
-  val inhabitant3 = system.actorOf(Props(new Inhabitant("Lucia", resourcesManager)), "Lucia")
+    val environmentManager = context.spawn(EnvironmentManager(resourcesManager), "Environment")
 
-  val environment = system.actorOf(Props(new Environment(resourcesManager)), "Environment")
+    Behaviors.empty
+  }
+
+  val system = ActorSystem[Nothing](rootBehavior, "Tribe")
+
+}
+

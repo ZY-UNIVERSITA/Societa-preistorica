@@ -1,18 +1,20 @@
 package com.zy.societapreistorica
 package model.utils
 
-import model.actor.{LoseResource, NothingResource, ReplenishResource}
+import model.traits.{LoseResource, ReplenishResource}
+
+import com.zy.societapreistorica.model.entities.ResourcesEnum.WATER
 
 object EnvironmentalEventModifier {
   def rain(): ReplenishResource = {
-    ReplenishResource("water", 1)
+    ReplenishResource(WATER, 1)
   }
 
   def drought(): LoseResource = {
-    LoseResource("water", 1)
+    LoseResource(WATER, 1)
   }
 
-  def clearWeather(): NothingResource = {
-    NothingResource()
+  def clearWeather(): ReplenishResource = {
+    ReplenishResource(WATER, 0)
   }
 }

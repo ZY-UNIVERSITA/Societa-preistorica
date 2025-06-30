@@ -8,4 +8,12 @@ lazy val root = (project in file("."))
     idePackagePrefix := Some("com.zy.societapreistorica")
   )
 
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.8.8"
+resolvers += "Akka library repository".at("https://repo.akka.io/maven")
+
+val AkkaVersion = "2.8.8"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % AkkaVersion
+
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.5.18"
+
+

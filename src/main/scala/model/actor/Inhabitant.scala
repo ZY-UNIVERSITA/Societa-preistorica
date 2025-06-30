@@ -1,5 +1,5 @@
 package com.zy.societapreistorica
-package model
+package model.actor
 
 import akka.actor.{Actor, ActorRef}
 
@@ -10,6 +10,8 @@ class Inhabitant(name: String, resourceManager: ActorRef) extends Actor {
   )
 
   override def preStart(): Unit = {
+    super.preStart()
+
     resourceManager ! GetResource(name, "water")
     resourceManager ! GetResource(name, "wood")
   }
